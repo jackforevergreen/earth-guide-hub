@@ -52,6 +52,12 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				// Forevergreen custom colors
+				forest: 'hsl(var(--forest))',
+				sage: 'hsl(var(--sage))',
+				earth: 'hsl(var(--earth))',
+				leaf: 'hsl(var(--leaf))',
+				ocean: 'hsl(var(--ocean))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
