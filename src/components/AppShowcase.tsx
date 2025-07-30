@@ -1,23 +1,23 @@
+import app from "@/assets/app.jpg";
 import { Button } from "@/components/ui/button";
-import { Smartphone, BarChart3, Leaf, Calendar } from "lucide-react";
-import appMockup from "@/assets/app-mockup.png";
+import { BarChart3, Calendar, Leaf, Smartphone } from "lucide-react";
 
 const features = [
   {
     icon: BarChart3,
     title: "Carbon Tracking",
-    description: "Real-time monitoring of your environmental impact"
+    description: "Real-time monitoring of your environmental impact",
   },
   {
     icon: Calendar,
     title: "Monthly Reports",
-    description: "Detailed insights and progress analytics"
+    description: "Detailed insights and progress analytics",
   },
   {
     icon: Leaf,
     title: "Easy Offsetting",
-    description: "One-tap carbon credit purchases"
-  }
+    description: "One-tap carbon credit purchases",
+  },
 ];
 
 const AppShowcase = () => {
@@ -30,10 +30,11 @@ const AppShowcase = () => {
               Your Climate <span className="text-primary">Companion</span>
             </h2>
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              Take control of your environmental impact with our intuitive app. Track emissions, 
-              get personalized insights, and make a real difference with verified carbon offsets.
+              Take control of your environmental impact with our intuitive app.
+              Track emissions, get personalized insights, and make a real
+              difference with verified carbon offsets.
             </p>
-            
+
             <div className="space-y-6 mb-8">
               {features.map((feature, index) => (
                 <div key={index} className="flex items-start gap-4">
@@ -51,33 +52,20 @@ const AppShowcase = () => {
                 </div>
               ))}
             </div>
-            
+
             <Button variant="hero" size="lg" className="text-lg px-8 py-6">
               <Smartphone className="h-5 w-5" />
               Download for iOS
             </Button>
           </div>
-          
+
           <div className="relative">
-            <div className="relative bg-gradient-to-br from-muted to-accent/30 rounded-3xl p-8 shadow-[var(--shadow-card)]">
-              <div className="bg-background rounded-2xl p-6 shadow-inner">
-                <img 
-                  src={appMockup} 
-                  alt="Forevergreen App Interface" 
-                  className="w-full h-96 object-contain rounded-xl"
-                />
-              </div>
-              
-              <div className="mt-8 flex justify-center gap-4">
-                <Button variant="outline" className="px-6">
-                  <span className="text-xs">GET IT ON</span><br />
-                  <span className="text-sm font-bold">Google Play</span>
-                </Button>
-                <Button variant="outline" className="px-6">
-                  <span className="text-xs">Download on the</span><br />
-                  <span className="text-sm font-bold">App Store</span>
-                </Button>
-              </div>
+            <div className="bg-background rounded-2xl p-6 shadow-inner">
+              <img
+                src={app}
+                alt="Forevergreen App Interface"
+                className="w-full h-96 object-contain rounded-xl"
+              />
             </div>
           </div>
         </div>
