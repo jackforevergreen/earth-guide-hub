@@ -4,7 +4,7 @@ import heroBackground from "@/assets/hero-background.jpg";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${heroBackground})` }}
@@ -27,8 +27,7 @@ const Hero = () => {
             Download the App
           </Button>
           <Button variant="outline-hero" size="lg" className="text-lg px-8 py-6">
-            <Play className="h-5 w-5" />
-            Watch on YouTube
+            Offset Now
           </Button>
         </div>
       </div>

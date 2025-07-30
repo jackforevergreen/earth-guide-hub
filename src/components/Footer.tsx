@@ -5,10 +5,11 @@ const footerLinks = {
   company: [
     { name: "About", href: "#" },
     { name: "FAQ", href: "#" },
-    { name: "Contact", href: "mailto:hello@forevergreen.com" }
+    { name: "Contact", href: "mailto:info@forevergreen.earth" }
   ],
   products: [
     { name: "Carbon Credits", href: "#" },
+    { name: "Methodology", href: "#" },
     { name: "Offset Flights", href: "#" },
     { name: "Store", href: "#" }
   ],
@@ -33,9 +34,15 @@ const Footer = () => {
               <span className="text-2xl font-bold">Forevergreen</span>
             </div>
             <p className="text-sage leading-relaxed max-w-md">
-              Making sustainability simple and accessible. Track, reduce, and offset 
-              your carbon footprint while supporting verified environmental projects.
+              We believe in creating a community where sustainability is accessible for everyone. 
+              We are building the future of our planet, one tree at a time.
             </p>
+            <div className="mt-6">
+              <p className="text-sage text-sm">
+                <strong>Contact us:</strong><br />
+                info@forevergreen.earth
+              </p>
+            </div>
           </div>
           
           <div>
@@ -75,7 +82,7 @@ const Footer = () => {
         
         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
           <p className="text-sage text-sm">
-            © 2024 Forevergreen. All rights reserved.
+            © 2024 by Forevergreen Earth INC.
           </p>
           
           <div className="flex items-center gap-6">

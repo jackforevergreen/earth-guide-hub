@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Smartphone, BarChart3, Leaf, Calendar } from "lucide-react";
+import appMockup from "@/assets/app-mockup.png";
 
 const features = [
   {
@@ -60,12 +61,22 @@ const AppShowcase = () => {
           <div className="relative">
             <div className="relative bg-gradient-to-br from-muted to-accent/30 rounded-3xl p-8 shadow-[var(--shadow-card)]">
               <div className="bg-background rounded-2xl p-6 shadow-inner">
-                <div className="w-full h-96 bg-gradient-to-br from-primary/10 to-forest/10 rounded-xl flex items-center justify-center">
-                  <div className="text-center">
-                    <Smartphone className="h-24 w-24 text-primary mx-auto mb-4" />
-                    <p className="text-muted-foreground">App Screenshot Placeholder</p>
-                  </div>
-                </div>
+                <img 
+                  src={appMockup} 
+                  alt="Forevergreen App Interface" 
+                  className="w-full h-96 object-contain rounded-xl"
+                />
+              </div>
+              
+              <div className="mt-8 flex justify-center gap-4">
+                <Button variant="outline" className="px-6">
+                  <span className="text-xs">GET IT ON</span><br />
+                  <span className="text-sm font-bold">Google Play</span>
+                </Button>
+                <Button variant="outline" className="px-6">
+                  <span className="text-xs">Download on the</span><br />
+                  <span className="text-sm font-bold">App Store</span>
+                </Button>
               </div>
             </div>
           </div>
