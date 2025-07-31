@@ -130,3 +130,17 @@ All colors MUST be HSL.
 .animate-float {
   animation: float 3s ease-in-out infinite;
 }
+
+@keyframes zoomSlow {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.08); /* subtle and natural */
+  }
+}
+
+.animate-zoomSlow {
+  animation: zoomSlow 30s ease-in-out infinite alternate;
+  will-change: transform;
+}

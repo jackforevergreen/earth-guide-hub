@@ -7,6 +7,8 @@ import energyCredit from "@/assets/energy-waste-credit.png";
 import hydroCredit from "@/assets/hydroelectric.png";
 import reforestCredit from "@/assets/reforest-credit.png";
 
+import OurPartners from "@/components/Partners";
+
 const projects = [
   {
     icon: energyCredit,
@@ -124,6 +126,8 @@ const CarbonProjects = () => {
           </Button>
         </div>
       </div>
+
+      <OurPartners />
     </section>
   );
 };
