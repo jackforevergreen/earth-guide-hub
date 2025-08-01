@@ -2,11 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Trees } from "lucide-react";
 
 const navigationItems = [
-  { name: "Home", href: "#", active: true },
+  { name: "Home", href: "/", active: true },
   { name: "Course", href: "#" },
   { name: "Carbon Credits", href: "#" },
   { name: "Projects", href: "#" },
-  { name: "Learn", href: "#" },
+  { name: "Blog", href: "/blog" },
   { name: "About", href: "#" },
   { name: "FAQs", href: "#" },
   { name: "Shop", href: "#" },
