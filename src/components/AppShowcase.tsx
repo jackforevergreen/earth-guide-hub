@@ -1,77 +1,143 @@
-import app from "@/assets/app.jpg";
+// components/ClimateHero.tsx
+import appStoreBadge from "@/assets/app-store.svg";
+import Phone from "@/assets/phone.png";
+
 import { Button } from "@/components/ui/button";
-import { BarChart3, Calendar, Leaf, Smartphone } from "lucide-react";
+import { motion } from "framer-motion";
+import { BarChart3, Calendar, Leaf, Smartphone, Star } from "lucide-react";
 
 const features = [
   {
     icon: BarChart3,
-    title: "Carbon Tracking",
-    description: "Real-time monitoring of your environmental impact",
+    title: "Calculate Your Footprint",
+    description: "Real-time monitoring of your environmental impact.",
   },
   {
     icon: Calendar,
-    title: "Monthly Reports",
-    description: "Detailed insights and progress analytics",
+    title: "Track Over Time",
+    description: "Detailed insights and progress analytics.",
   },
   {
     icon: Leaf,
-    title: "Easy Offsetting",
-    description: "One-tap carbon credit purchases",
+    title: "Offset to Reach Net-Zero",
+    description: "One-tap carbon credit purchases.",
   },
 ];
 
-const AppShowcase = () => {
+export default function ClimateHero() {
   return (
-    <section className="py-20 bg-background">
+    <section className="py-20 bg-background relative overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
-          <div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
-              Your Climate <span className="text-primary">Companion</span>
+          {/* LEFT: Copy + Reviews + (Mobile phone) + How it works */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="max-w-xl"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground leading-tight">
+              Reduce your <span className="text-primary">Carbon Footprint</span>{" "}
+              On Your Phone
             </h2>
-            <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
-              Take control of your environmental impact with our intuitive app.
-              Track emissions, get personalized insights, and make a real
-              difference with verified carbon offsets.
+
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Track emissions, get insights, and offset without the complexity.
             </p>
 
-            <div className="space-y-6 mb-8">
-              {features.map((feature, index) => (
-                <div key={index} className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-accent to-sage rounded-xl flex items-center justify-center shadow-[var(--shadow-soft)] flex-shrink-0">
-                    <feature.icon className="h-6 w-6 text-primary" />
+            {/* Reviews + App Store badge */}
+            <div className="mt-6 flex flex-col sm:flex-row items-center gap-4">
+              <div className="flex items-center gap-2 text-foreground">
+                {[...Array(5)].map((_, i) => (
+                  <Star
+                    key={i}
+                    className="h-5 w-5 fill-current text-yellow-400"
+                  />
+                ))}
+                <span className="ml-2 text-lg font-semibold">5.0</span>
+                <span className="text-muted-foreground">• 25 Ratings</span>
+              </div>
+
+              <a
+                href="https://apps.apple.com/us/app/forevergreen-app/id6578432563"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block"
+                aria-label="Download on the App Store"
+              >
+                <img
+                  src={appStoreBadge}
+                  alt="Download on the App Store"
+                  className="h-12 md:h-14 w-auto select-none"
+                  draggable={false}
+                />
+              </a>
+            </div>
+
+            {/* MOBILE-ONLY PHONE (sits above How it works) */}
+            <motion.div
+              className="mt-8 block lg:hidden relative flex justify-center"
+              animate={{ y: [0, -8, 0], rotate: [0, 1.2, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              aria-hidden="true"
+            >
+              <img
+                src={Phone}
+                alt=""
+                className="w-full max-w-[420px] h-auto"
+                draggable={false}
+              />
+            </motion.div>
+
+            {/* How it works */}
+            <h3 className="mt-10 mb-4 text-lg font-semibold text-foreground">
+              How it works
+            </h3>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              {features.map((f, i) => (
+                <div
+                  key={i}
+                  className="rounded-xl border border-border bg-card/60 p-4 text-center hover:shadow-lg transition-shadow"
+                >
+                  <div className="mx-auto mb-3 w-10 h-10 rounded-lg bg-accent/40 flex items-center justify-center">
+                    <f.icon className="h-5 w-5 text-primary" />
                   </div>
-                  <div>
-                    <h3 className="text-lg font-semibold mb-2 text-foreground">
-                      {feature.title}
-                    </h3>
-                    <p className="text-muted-foreground">
-                      {feature.description}
-                    </p>
+                  <div className="text-sm font-semibold text-foreground">
+                    {f.title}
+                  </div>
+                  <div className="mt-1 text-xs text-muted-foreground">
+                    {f.description}
                   </div>
                 </div>
               ))}
             </div>
 
-            <Button variant="hero" size="lg" className="text-lg px-8 py-6">
-              <Smartphone className="h-5 w-5" />
-              Download for iOS
+            <Button
+              variant="hero"
+              size="lg"
+              className="mt-8 text-lg px-8 py-6 inline-flex items-center gap-2"
+            >
+              <Smartphone className="h-6 w-6" />
+              Download Now!
             </Button>
-          </div>
+          </motion.div>
 
-          <div className="relative">
-            <div className="bg-background rounded-2xl p-6 shadow-inner">
-              <img
-                src={app}
-                alt="Forevergreen App Interface"
-                className="w-full h-96 object-contain rounded-xl"
-              />
-            </div>
-          </div>
+          {/* DESKTOP PHONE (stays on the right) */}
+          <motion.div
+            className="relative hidden lg:flex justify-center"
+            animate={{ y: [0, -10, 0], rotate: [0, 1.2, 0] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <img
+              src={Phone}
+              alt="Forevergreen App Interface"
+              className="w-full max-w-[560px] h-auto"
+              draggable={false}
+            />
+          </motion.div>
         </div>
       </div>
     </section>
   );
-};
-
-export default AppShowcase;
+}

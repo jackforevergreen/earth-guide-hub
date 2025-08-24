@@ -1,25 +1,23 @@
-import Navigation from "@/components/Navigation";
-import Hero from "@/components/Hero";
-import HowItWorks from "@/components/HowItWorks";
 import AppShowcase from "@/components/AppShowcase";
-import CarbonProjects from "@/components/CarbonProjects";
-import BlogSection from "@/components/BlogSection";
-import FlightOffset from "@/components/FlightOffset";
-import YouTubePromo from "@/components/YouTubePromo";
-import Newsletter from "@/components/Newsletter";
+import Community from "@/components/Community";
 import Footer from "@/components/Footer";
+import Hero from "@/components/Hero";
+import Navigation from "@/components/Navigation";
+import Newsletter from "@/components/Newsletter";
+import Offset from "@/components/Offset";
+import YouTubePromo from "@/components/YouTubePromo";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
       <Hero />
-      <HowItWorks />
+      <Community />
       <AppShowcase />
-      <CarbonProjects />
-      <BlogSection />
-      <FlightOffset />
+
       <YouTubePromo />
+      <Offset />
+
       <Newsletter />
       <Footer />
     </div>
