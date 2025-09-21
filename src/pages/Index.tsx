@@ -6,6 +6,7 @@ import Navigation from "@/components/Navigation";
 import Newsletter from "@/components/Newsletter";
 import Offset from "@/components/Offset";
 import YouTubePromo from "@/components/YouTubePromo";
+import Business from "@/components/business";
 
 const Index = () => {
   return (
@@ -17,6 +18,7 @@ const Index = () => {
 
       <YouTubePromo />
       <Offset />
+      <Business />
 
       <Newsletter />
       <Footer />
