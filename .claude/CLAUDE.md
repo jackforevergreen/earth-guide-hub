@@ -35,7 +35,7 @@ This is a React + TypeScript + Vite application using:
 - **Utils**: Utility functions in `/src/lib/utils.ts`
 
 ### Key Features
-- **ForeverGreen Landing Page**: A carbon offset/environmental sustainability focused website
+- **Forevergreen Landing Page**: A carbon offset/environmental sustainability focused website
 - **Blog Section**: Static blog posts with engagement metrics (views, comments, likes)
 - **Carbon Projects**: Showcases different environmental projects (afforestation, energy waste, flight offset, reforestation, hydroelectric)
 - **Mobile App Promotion**: Features app store links and mockup displays

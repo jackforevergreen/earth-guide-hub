@@ -1,4 +1,5 @@
 import Sub from "@/assets/sub.png";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { CreditCard, Plane, Repeat } from "lucide-react";
@@ -105,7 +106,7 @@ export default function OffsetOptionsShowcase() {
             variants={fadeUp}
             custom={0.3}
           >
-            <Card className="flex flex-col justify-between p-8 rounded-2xl bg-gradient-to-br from-card to-accent/20 shadow-[var(--shadow-card)] border-0 hover:shadow-xl transition-all duration-300 hover:scale-105 h-[540px]">
+            <Card className="flex flex-col justify-between p-8 rounded-2xl bg-gradient-to-br from-card to-accent/20 shadow-[var(--shadow-card)] border-2 hover:shadow-xl transition-all duration-300 hover:scale-105 h-[540px]">
               {/* Card Content */}
               <div className="flex-grow flex flex-col">
                 <div className="flex items-center gap-3 mb-4">
@@ -139,9 +140,9 @@ export default function OffsetOptionsShowcase() {
               </div>
 
               <div className="mt-auto space-y-3">
-                <button className="w-full rounded-xl bg-primary text-primary-foreground font-medium py-3 shadow-[var(--shadow-button)] hover:opacity-90 transition">
+                <Button variant="primary-action" size="lg" className="w-full rounded-xl py-3 text-lg">
                   Start Subscription
-                </button>
+                </Button>
                 <div className="h-5 flex items-center justify-center text-xs text-muted-foreground">
                   Billed monthly • Cancel anytime
                 </div>
@@ -158,7 +159,7 @@ export default function OffsetOptionsShowcase() {
             custom={0.45}
           >
             <Card
-              className="flex flex-col justify-between p-8 text-center rounded-2xl bg-gradient-to-br from-card to-accent/20 shadow-[var(--shadow-card)] border-0 hover:shadow-xl transition-all duration-300 hover:scale-105 h-[540px]"
+              className="flex flex-col justify-between p-8 text-center rounded-2xl bg-gradient-to-br from-card to-accent/20 shadow-[var(--shadow-card)] border-2 hover:shadow-xl transition-all duration-300 hover:scale-105 h-[540px]"
               onMouseEnter={() => setPaused(true)}
               onMouseLeave={() => setPaused(false)}
               onFocus={() => setPaused(true)}
@@ -196,9 +197,9 @@ export default function OffsetOptionsShowcase() {
               </div>
 
               <div className="mt-auto space-y-3">
-                <button className="w-full rounded-xl bg-primary text-primary-foreground font-medium py-3 shadow-[var(--shadow-button)] hover:opacity-90 transition">
+                <Button variant="primary-action" size="lg" className="w-full rounded-xl py-3 text-lg">
                   Offset Now
-                </button>
+                </Button>
                 <div className="h-5 flex items-center justify-center">
                   <div className="flex justify-center gap-1.5">
                     {projects.map((_, i) => (
@@ -223,7 +224,7 @@ export default function OffsetOptionsShowcase() {
             variants={fadeUp}
             custom={0.6}
           >
-            <Card className="flex flex-col justify-between p-8 text-center rounded-2xl bg-gradient-to-br from-card to-accent/20 shadow-[var(--shadow-card)] border-0 hover:shadow-xl transition-all duration-300 hover:scale-105 h-[540px]">
+            <Card className="flex flex-col justify-between p-8 text-center rounded-2xl bg-gradient-to-br from-card to-accent/20 shadow-[var(--shadow-card)] border-2 hover:shadow-xl transition-all duration-300 hover:scale-105 h-[540px]">
               <div className="flex-grow flex flex-col">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-forest flex items-center justify-center shadow-[var(--shadow-button)]">
@@ -256,9 +257,9 @@ export default function OffsetOptionsShowcase() {
               </div>
 
               <div className="mt-auto space-y-3">
-                <button className="w-full rounded-xl bg-primary text-primary-foreground font-medium py-3 shadow-[var(--shadow-button)] hover:opacity-90 transition">
+                <Button variant="primary-action" size="lg" className="w-full rounded-xl py-3 text-lg">
                   Offset This Flight
-                </button>
+                </Button>
                 {/* Same fixed height as others */}
                 <div className="h-5 flex items-center justify-center text-xs text-muted-foreground">
                   Includes long-haul & short flights

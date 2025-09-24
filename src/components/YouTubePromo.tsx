@@ -4,26 +4,27 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { Play, Users, Youtube } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
 
 const videos = [
   {
     id: "9JIAtBjy0Z0",
     title: "The Immortal Jellyfish Explained",
-    meta: "249 views • 1 day ago",
+    meta: "2.1K views • 2 weeks ago",
   },
   {
     id: "2a6BRN0TXu0",
     title: "Top 5 Smartest Animals and How We Measure Intelligence",
-    meta: "633 views • 3 days ago",
+    meta: "4.2K views • 1 month ago",
   },
   {
     id: "uswcbDK2HeM",
     title: "How Bees Make Honey",
-    meta: "1.3K views • 5 days ago",
+    meta: "8.7K views • 2 months ago",
   },
 ];
 
-const subs = "248K subscribers";
+const subs = "250K+ subscribers";
 const views = "630,341,877 total views";
 
 // choose middle as hero, sides as supporting
@@ -75,20 +76,8 @@ export default function YouTubePromo() {
                 Forevergreen
               </div>
               <div className="text-sm md:text-base text-muted-foreground">
-                @Forevergreenapp • {subs}
+                @Forevergreenapp • 500+ Videos
               </div>
-            </div>
-            <div className="flex gap-3 mt-2 sm:mt-0">
-              <Button
-                variant="secondary"
-                className="px-5 py-2 text-base rounded-full"
-              >
-                Join
-              </Button>
-              <Button className="px-6 py-2 text-base rounded-full bg-black text-white hover:bg-gray-800 transition-colors">
-                <Youtube className="h-5 w-5 mr-2" />
-                Subscribe
-              </Button>
             </div>
           </div>
         </motion.div>
@@ -162,16 +151,87 @@ export default function YouTubePromo() {
             </div>
           </div>
 
-          <Button
+            <Button
             size="lg"
-            className="bg-[#FF0000] hover:bg-[#E60000] text-white text-lg md:text-xl px-8 md:px-10 py-6 md:py-7 inline-flex items-center gap-3 rounded-full shadow-lg transition-all duration-300"
-          >
-            <Youtube className="h-7 w-7" />
-            Subscribe on YouTube
-          </Button>
+            className="bg-[#FF0000] hover:bg-[#E60000] text-white text-lg md:text-xl font-bold px-8 md:px-10 py-6 md:py-7 inline-flex items-center gap-3 rounded-full shadow-lg transition-all duration-300"
+            asChild
+            >
+            <a
+              href="https://www.youtube.com/@Forevergreenapp?sub_confirmation=1"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-analytics-event="youtube-subscribe"
+              data-analytics-source="main-cta"
+            >
+              <Youtube className="!h-8 !w-8" />
+              Subscribe on YouTube
+            </a>
+            </Button>
         </motion.div>
       </div>
     </section>
+  );
+}
+
+/* ——— Lazy YouTube Embed ——— */
+
+function LazyYouTubeEmbed({ videoId, title, className = "" }: { videoId: string; title: string; className?: string }) {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isInView, setIsInView] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (ref.current) {
+      observer.observe(ref.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  const handleLoad = () => {
+    setIsLoaded(true);
+  };
+
+  return (
+    <div ref={ref} className={`relative ${className}`}>
+      {!isInView ? (
+        // YouTube thumbnail placeholder
+        <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
+          <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center">
+            <Play className="h-6 w-6 text-white ml-1" />
+          </div>
+        </div>
+      ) : (
+        <>
+          {!isLoaded && (
+            <div className="absolute inset-0 bg-gray-200 flex items-center justify-center">
+              <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center animate-pulse">
+                <Play className="h-6 w-6 text-white ml-1" />
+              </div>
+            </div>
+          )}
+          <iframe
+            className="absolute inset-0 w-full h-full"
+            src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`}
+            title={title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            loading="lazy"
+            onLoad={handleLoad}
+          />
+        </>
+      )}
+    </div>
   );
 }
 
@@ -181,13 +241,7 @@ function FeaturedVideoCard({ v }: { v: (typeof videos)[number] }) {
   return (
     <Card className="overflow-hidden bg-white border-0 shadow-[0_16px_60px_rgba(0,0,0,0.20)] rounded-2xl">
       <div className="aspect-video relative">
-        <iframe
-          className="absolute inset-0 w-full h-full"
-          src={`https://www.youtube.com/embed/${v.id}?rel=0&modestbranding=1&controls=0&showinfo=0`}
-          title={v.title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-        />
+        <LazyYouTubeEmbed videoId={v.id} title={v.title} />
       </div>
       <div className="p-5 md:p-6">
         <h3 className="font-semibold text-lg md:text-xl text-foreground line-clamp-2">
@@ -217,13 +271,7 @@ function TiltedVideoCard({
       className={`overflow-hidden bg-white border-0 shadow-[0_14px_44px_rgba(0,0,0,0.16)] rounded-2xl transition-transform hover:scale-[1.02] ${tiltClass}`}
     >
       <div className="aspect-video relative">
-        <iframe
-          className="absolute inset-0 w-full h-full"
-          src={`https://www.youtube.com/embed/${v.id}?rel=0&modestbranding=1`}
-          title={v.title}
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowFullScreen
-        />
+        <LazyYouTubeEmbed videoId={v.id} title={v.title} />
       </div>
       <div className="p-4 md:p-5">
         <h3 className="font-semibold text-foreground line-clamp-2">

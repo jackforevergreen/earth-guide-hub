@@ -2,6 +2,7 @@ import FGLogo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
 const navigationItems = [
   { name: "Home", href: "/", active: true },
@@ -36,30 +37,45 @@ const Navigation = () => {
               className="h-8 w-auto md:h-10 object-contain select-none"
               draggable={false}
             />
-            <span className="text-lg md:text-xl font-bold text-foreground">
-              Forevergreen
+            <span className="text-lg md:text-2xl font-bold text-foreground">
+              Forever<span className="text-lg md:text-2xl font-bold text-foreground" style={{ color: "#217E38" }}>green</span>
             </span>
           </a>
 
           {/* Desktop links */}
           <div className="hidden lg:flex items-center space-x-8">
             {navigationItems.map((item, i) => (
-              <a
+              <motion.a
                 key={i}
                 href={item.href}
-                className={`text-sm font-medium transition-colors hover:text-primary ${
+                className={`text-lg font-bold transition-all duration-200 hover:text-primary hover:scale-105 ${
                   item.active
                     ? "text-primary border-b-2 border-primary pb-1"
                     : "text-muted-foreground"
                 }`}
+                whileHover={{
+                  scale: 1.05,
+                  transition: { duration: 0.15, ease: "easeOut" }
+                }}
+                whileTap={{
+                  scale: 0.95,
+                  transition: { duration: 0.1 }
+                }}
               >
-                {item.name}
-              </a>
+                <motion.span
+                  whileHover={{
+                    y: -1,
+                    transition: { duration: 0.15 }
+                  }}
+                >
+                  {item.name}
+                </motion.span>
+              </motion.a>
             ))}
           </div>
 
           {/* Desktop CTA */}
-          <Button variant="hero" size="sm" className="hidden lg:flex">
+          <Button variant="hero" size="lg" className="hidden lg:flex text-lg">
             Get Started
           </Button>
 
@@ -82,16 +98,25 @@ const Navigation = () => {
         >
           <div className="py-2 border-t border-border">
             {navigationItems.map((item, i) => (
-              <a
+              <motion.a
                 key={i}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className={`block px-2 py-3 text-base font-medium rounded-md ${
+                className={`block px-2 py-3 text-base font-medium rounded-md transition-all duration-200 ${
                   item.active ? "text-primary" : "text-foreground"
-                } hover:bg-accent/30`}
+                } hover:bg-accent/30 hover:scale-105 hover:text-primary`}
+                whileHover={{
+                  scale: 1.02,
+                  x: 4,
+                  transition: { duration: 0.15 }
+                }}
+                whileTap={{
+                  scale: 0.98,
+                  transition: { duration: 0.1 }
+                }}
               >
                 {item.name}
-              </a>
+              </motion.a>
             ))}
 
             <div className="px-2 pt-2 pb-4">

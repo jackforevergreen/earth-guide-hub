@@ -1,5 +1,6 @@
 import { Separator } from "@/components/ui/separator";
-import { Leaf, Youtube, Instagram, Linkedin, Twitter } from "lucide-react";
+import { Youtube, Instagram, Linkedin, Twitter } from "lucide-react";
+import FGLogo from "@/assets/logo.png";
 
 const footerLinks = {
   company: [
@@ -14,10 +15,10 @@ const footerLinks = {
     { name: "Store", href: "#" }
   ],
   social: [
-    { name: "YouTube", href: "#", icon: Youtube },
-    { name: "Instagram", href: "#", icon: Instagram },
-    { name: "LinkedIn", href: "#", icon: Linkedin },
-    { name: "Twitter", href: "#", icon: Twitter }
+    { name: "YouTube", href: "https://www.youtube.com/@Forevergreenapp", icon: Youtube },
+    { name: "Instagram", href: "https://www.instagram.com/forevergreenapp/", icon: Instagram },
+    { name: "LinkedIn", href: "https://www.linkedin.com/company/forevergreenapp/", icon: Linkedin },
+    { name: "Twitter", href: "https://twitter.com/forevergreenapp", icon: Twitter }
   ]
 };
 
@@ -27,11 +28,16 @@ const Footer = () => {
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-8 mb-12">
           <div className="md:col-span-2">
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
-                <Leaf className="h-6 w-6 text-primary-foreground" />
-              </div>
-              <span className="text-2xl font-bold">Forevergreen</span>
+            <div className="flex items-center gap-2 mb-6 bg-white rounded-md w-fit p-1 pr-3">
+              <img
+              src={FGLogo}
+              alt="Forevergreen"
+              className="w-auto md:h-12 object-contain select-none"
+              draggable={false}
+            />
+                          <span className="text-lg md:text-xl font-bold text-foreground">
+              Forever<span className="text-lg md:text-xl font-bold text-foreground" style={{ color: "#217E38" }}>green</span>
+            </span>
             </div>
             <p className="text-sage leading-relaxed max-w-md">
               We believe in creating a community where sustainability is accessible for everyone. 
