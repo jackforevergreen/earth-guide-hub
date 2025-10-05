@@ -2,6 +2,7 @@ import heroBackground from "@/assets/hero-background.jpg";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Download, Users, ShoppingCart } from "lucide-react";
+import { useSubscriberCount } from "@/lib/youtube/youtube-context";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
@@ -15,6 +16,7 @@ const stagger = {
 };
 
 const Hero = () => {
+  const subscriberCount = useSubscriberCount();
   return (
     <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden pt-16">
       {/* Background */}
@@ -104,7 +106,7 @@ const Hero = () => {
           <div className="flex items-center gap-2 text-sm sm:text-base">
             <Users className="h-4 w-4 sm:h-5 sm:w-5" />
             <span className="font-medium">
-              <span className="text-white font-bold">250k+</span> Subscribers
+              <span className="text-white font-bold">{subscriberCount}</span> Subscribers
             </span>
           </div>
           <div className="hidden sm:block w-px h-4 bg-white/30" />

@@ -10,6 +10,7 @@ import {
 import { Leaf, Mail, Trees, Youtube } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSubscriberCount } from "@/lib/youtube/youtube-context";
 
 /* ===========================
    Types
@@ -240,10 +241,51 @@ function StatBubble({
    Section
 =========================== */
 export default function CommunityStatsLocked({
-  stats = statsDefault,
+  stats,
 }: {
   stats?: Stat[];
 }) {
+  const subscriberCount = useSubscriberCount();
+
+  // Create dynamic stats with real subscriber count
+  const dynamicStats = stats || [
+    {
+      label: "1.2M+ lbs Offset",
+      icon: <Trees className="w-[2em] h-[2em]" />,
+      rotate: -8,
+      coords: { x: 340, y: -210 },
+      coordsSm: { x: 130, y: -70 },
+      link: "/shop",
+      linkType: "internal" as const,
+    },
+    {
+      label: `${subscriberCount} Subscribers`,
+      icon: <Youtube className="w-[2em] h-[2em] text-red-500" />,
+      rotate: 8,
+      coords: { x: -340, y: -210 },
+      coordsSm: { x: -130, y: -70 },
+      link: "https://www.youtube.com/@Forevergreenapp",
+      linkType: "external" as const,
+    },
+    {
+      label: "12K+ tons Calculated",
+      icon: <Leaf className="w-[2em] h-[2em] text-green-600" />,
+      rotate: -8,
+      coords: { x: -300, y: 210 },
+      coordsSm: { x: -120, y: 95 },
+      link: "https://apps.apple.com/us/app/forevergreen-app/id6578432563",
+      linkType: "external" as const,
+    },
+    {
+      label: "3K+ Newsletter Subs",
+      icon: <Mail className="w-[2em] h-[2em]" />,
+      rotate: 10,
+      coords: { x: 300, y: 210 },
+      coordsSm: { x: 120, y: 95 },
+      link: "#newsletter",
+      linkType: "scroll" as const,
+    },
+  ];
   const prefersReduced = useReducedMotion();
   const sectionRef = useRef<HTMLElement | null>(null);
   const isSmall = useIsSmall();
@@ -315,7 +357,7 @@ export default function CommunityStatsLocked({
           </motion.h2>
 
           {/* Stat bubbles with explicit coordinates */}
-          {stats.slice(0, 4).map((s, i) => {
+          {dynamicStats.slice(0, 4).map((s, i) => {
             const baseXY = isSmall
               ? s.coordsSm ?? s.coords ?? { x: 0, y: 0 }
               : s.coords ?? s.coordsSm ?? { x: 0, y: 0 };
