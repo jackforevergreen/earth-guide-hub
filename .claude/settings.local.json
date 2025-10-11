@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/Mark/Documents/Forevergreen/fg-react-app/client/app/(carbon-calculator)/**)",
+      "Read(//c/Users/Mark/Documents/Forevergreen/fg-react-app/client/components/carbon-calculator/**)",
+      "Read(//c/Users/Mark/Documents/Forevergreen/fg-react-app/client/api/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

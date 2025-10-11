@@ -3,21 +3,20 @@ import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { useLocation } from "react-router-dom";
 
 const navigationItems = [
-  { name: "Home", href: "/", active: true },
+  { name: "Home", href: "/" },
+  { name: "Carbon Calculator", href: "/carbon-calculator" },
+  { name: "Shop", href: "/shop" },
   { name: "Course", href: "#" },
-  { name: "Carbon Credits", href: "#" },
-  { name: "Projects", href: "#" },
   { name: "Blog", href: "/blog" },
   { name: "About", href: "#" },
-  { name: "FAQs", href: "#" },
-  { name: "Shop", href: "#" },
-  { name: "Cart", href: "#" },
 ];
 
 const Navigation = () => {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -44,34 +43,38 @@ const Navigation = () => {
 
           {/* Desktop links */}
           <div className="hidden lg:flex items-center space-x-8">
-            {navigationItems.map((item, i) => (
-              <motion.a
-                key={i}
-                href={item.href}
-                className={`text-lg font-bold transition-all duration-200 hover:text-primary hover:scale-105 ${
-                  item.active
-                    ? "text-primary border-b-2 border-primary pb-1"
-                    : "text-muted-foreground"
-                }`}
-                whileHover={{
-                  scale: 1.05,
-                  transition: { duration: 0.15, ease: "easeOut" }
-                }}
-                whileTap={{
-                  scale: 0.95,
-                  transition: { duration: 0.1 }
-                }}
-              >
-                <motion.span
+            {navigationItems.map((item, i) => {
+              const isActive = location.pathname === item.href ||
+                (item.href.startsWith('/carbon-calculator') && location.pathname.startsWith('/carbon-calculator'));
+              return (
+                <motion.a
+                  key={i}
+                  href={item.href}
+                  className={`text-lg font-bold transition-all duration-200 hover:text-primary hover:scale-105 ${
+                    isActive
+                      ? "text-primary border-b-2 border-primary pb-1"
+                      : "text-muted-foreground"
+                  }`}
                   whileHover={{
-                    y: -1,
-                    transition: { duration: 0.15 }
+                    scale: 1.05,
+                    transition: { duration: 0.15, ease: "easeOut" }
+                  }}
+                  whileTap={{
+                    scale: 0.95,
+                    transition: { duration: 0.1 }
                   }}
                 >
-                  {item.name}
-                </motion.span>
-              </motion.a>
-            ))}
+                  <motion.span
+                    whileHover={{
+                      y: -1,
+                      transition: { duration: 0.15 }
+                    }}
+                  >
+                    {item.name}
+                  </motion.span>
+                </motion.a>
+              );
+            })}
           </div>
 
           {/* Desktop CTA */}
@@ -97,27 +100,31 @@ const Navigation = () => {
           }`}
         >
           <div className="py-2 border-t border-border">
-            {navigationItems.map((item, i) => (
-              <motion.a
-                key={i}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className={`block px-2 py-3 text-base font-medium rounded-md transition-all duration-200 ${
-                  item.active ? "text-primary" : "text-foreground"
-                } hover:bg-accent/30 hover:scale-105 hover:text-primary`}
-                whileHover={{
-                  scale: 1.02,
-                  x: 4,
-                  transition: { duration: 0.15 }
-                }}
-                whileTap={{
-                  scale: 0.98,
-                  transition: { duration: 0.1 }
-                }}
-              >
-                {item.name}
-              </motion.a>
-            ))}
+            {navigationItems.map((item, i) => {
+              const isActive = location.pathname === item.href ||
+                (item.href.startsWith('/carbon-calculator') && location.pathname.startsWith('/carbon-calculator'));
+              return (
+                <motion.a
+                  key={i}
+                  href={item.href}
+                  onClick={() => setOpen(false)}
+                  className={`block px-2 py-3 text-base font-medium rounded-md transition-all duration-200 ${
+                    isActive ? "text-primary" : "text-foreground"
+                  } hover:bg-accent/30 hover:scale-105 hover:text-primary`}
+                  whileHover={{
+                    scale: 1.02,
+                    x: 4,
+                    transition: { duration: 0.15 }
+                  }}
+                  whileTap={{
+                    scale: 0.98,
+                    transition: { duration: 0.1 }
+                  }}
+                >
+                  {item.name}
+                </motion.a>
+              );
+            })}
 
             <div className="px-2 pt-2 pb-4">
               <Button
