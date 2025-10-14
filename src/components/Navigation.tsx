@@ -1,9 +1,12 @@
 import FGLogo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { Menu, X, User } from "lucide-react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { auth } from "@/lib/firebase";
+import { User as FirebaseUser } from "firebase/auth";
+import LoginModal from "@/components/auth/LoginModal";
 
 const navigationItems = [
   { name: "Home", href: "/" },
@@ -16,7 +19,17 @@ const navigationItems = [
 
 const Navigation = () => {
   const [open, setOpen] = useState(false);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [user, setUser] = useState<FirebaseUser | null>(null);
   const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
@@ -78,9 +91,28 @@ const Navigation = () => {
           </div>
 
           {/* Desktop CTA */}
-          <Button variant="hero" size="lg" className="hidden lg:flex text-lg">
-            Get Started
-          </Button>
+          {user ? (
+            <Button
+              variant="outline"
+              size="lg"
+              className="hidden lg:flex text-lg gap-2 border-2 hover:border-primary hover:shadow-md transition-all"
+              onClick={() => navigate("/profile")}
+            >
+              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-sm">
+                <User className="h-4 w-4 text-white" />
+              </div>
+              <span className="font-semibold">Profile</span>
+            </Button>
+          ) : (
+            <Button
+              variant="hero"
+              size="lg"
+              className="hidden lg:flex text-lg font-semibold shadow-md hover:shadow-lg transition-all"
+              onClick={() => setLoginModalOpen(true)}
+            >
+              Log In
+            </Button>
+          )}
 
           {/* Mobile hamburger */}
           <button
@@ -127,17 +159,43 @@ const Navigation = () => {
             })}
 
             <div className="px-2 pt-2 pb-4">
-              <Button
-                variant="hero"
-                className="w-full"
-                onClick={() => setOpen(false)}
-              >
-                Get Started
-              </Button>
+              {user ? (
+                <Button
+                  variant="outline"
+                  className="w-full gap-2 border-2 h-12 font-semibold"
+                  onClick={() => {
+                    setOpen(false);
+                    navigate("/profile");
+                  }}
+                >
+                  <div className="h-8 w-8 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-sm">
+                    <User className="h-4 w-4 text-white" />
+                  </div>
+                  Profile
+                </Button>
+              ) : (
+                <Button
+                  variant="hero"
+                  className="w-full h-12 font-semibold text-base"
+                  onClick={() => {
+                    setOpen(false);
+                    setLoginModalOpen(true);
+                  }}
+                >
+                  Log In
+                </Button>
+              )}
             </div>
           </div>
         </div>
       </div>
+
+      {/* Login Modal */}
+      <LoginModal
+        isOpen={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+        onSuccess={() => navigate("/profile")}
+      />
     </nav>
   );
 };

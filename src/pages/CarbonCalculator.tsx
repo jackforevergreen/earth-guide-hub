@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation as useRouterLocation } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import PreSurvey from "@/components/carbon-calculator/PreSurvey";
 import Transportation from "@/components/carbon-calculator/Transportation";
@@ -7,6 +7,11 @@ import Diet from "@/components/carbon-calculator/Diet";
 import Energy from "@/components/carbon-calculator/Energy";
 import Breakdown from "@/components/carbon-calculator/Breakdown";
 import CalculatorNav from "@/components/carbon-calculator/CalculatorNav";
+import locationData from "@/utils/constants/locations.json";
+import type { Location } from "@/utils/locationHelpers";
+import { auth } from "@/lib/firebase";
+import { fetchEmissionsData } from "@/api/emissions";
+import type { SurveyData as SurveyDataType, SurveyEmissions as SurveyEmissionsType } from "@/types/emissions";
 
 export type SurveyData = {
   // Location
@@ -62,9 +67,12 @@ const steps = ["pre-survey", "transportation", "diet", "energy", "breakdown"];
 
 const CarbonCalculator = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
+  const routerLocation = useRouterLocation();
+  const searchParams = new URLSearchParams(routerLocation.search);
   const currentStep = searchParams.get("step") || "pre-survey";
+
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
   const [surveyData, setSurveyData] = useState<SurveyData>({
     country: "",
@@ -75,11 +83,11 @@ const CarbonCalculator = () => {
     useTrain: "No",
     useBus: "No",
     walkBike: "No",
-    diet: "",
-    electricBill: "",
-    waterBill: "",
-    propaneBill: "",
-    gasBill: "",
+    diet: "Average 🍗 ",
+    electricBill: "0",
+    waterBill: "0",
+    propaneBill: "0",
+    gasBill: "0",
     useWoodStove: "No",
     peopleInHome: 1,
   });
@@ -98,6 +106,48 @@ const CarbonCalculator = () => {
     monthlyEmissions: 0,
   });
 
+  // Load existing data if user is logged in
+  useEffect(() => {
+    const loadUserData = async () => {
+      if (auth.currentUser && !dataLoaded) {
+        try {
+          const existingData = await fetchEmissionsData();
+          if (existingData) {
+            // Merge existing data with current state
+            setSurveyData({
+              ...surveyData,
+              ...existingData.surveyData,
+            });
+            setSurveyEmissions({
+              ...surveyEmissions,
+              ...existingData.surveyEmissions,
+              totalEmissions: existingData.totalEmissions,
+              monthlyEmissions: existingData.monthlyEmissions,
+            });
+
+            // Set location if country exists
+            if (existingData.surveyData.country) {
+              const country = (locationData as Location[]).find(
+                (loc) => loc.abbreviation === existingData.surveyData.country
+              );
+              if (country) {
+                setSelectedLocation(country);
+              }
+            }
+          }
+          setDataLoaded(true);
+        } catch (error) {
+          console.error("Error loading user data:", error);
+          setDataLoaded(true);
+        }
+      } else if (!auth.currentUser) {
+        setDataLoaded(true);
+      }
+    };
+
+    loadUserData();
+  }, []);
+
   const goToStep = (step: string) => {
     navigate(`/carbon-calculator?step=${step}`);
   };
@@ -111,6 +161,8 @@ const CarbonCalculator = () => {
           <PreSurvey
             surveyData={surveyData}
             setSurveyData={setSurveyData}
+            selectedLocation={selectedLocation}
+            setSelectedLocation={setSelectedLocation}
             onNext={() => goToStep("transportation")}
           />
         );
@@ -121,6 +173,7 @@ const CarbonCalculator = () => {
             setSurveyData={setSurveyData}
             surveyEmissions={surveyEmissions}
             setSurveyEmissions={setSurveyEmissions}
+            selectedLocation={selectedLocation}
             onNext={() => goToStep("diet")}
           />
         );
@@ -141,6 +194,7 @@ const CarbonCalculator = () => {
             setSurveyData={setSurveyData}
             surveyEmissions={surveyEmissions}
             setSurveyEmissions={setSurveyEmissions}
+            selectedLocation={selectedLocation}
             onNext={() => goToStep("breakdown")}
           />
         );
@@ -152,7 +206,7 @@ const CarbonCalculator = () => {
           />
         );
       default:
-        return <PreSurvey surveyData={surveyData} setSurveyData={setSurveyData} onNext={() => goToStep("transportation")} />;
+        return <PreSurvey surveyData={surveyData} setSurveyData={setSurveyData} selectedLocation={selectedLocation} setSelectedLocation={setSelectedLocation} onNext={() => goToStep("transportation")} />;
     }
   };
 

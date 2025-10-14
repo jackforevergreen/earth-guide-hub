@@ -4,26 +4,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Calculator, Leaf, Globe, Info } from "lucide-react";
 import { motion } from "framer-motion";
 import type { SurveyData } from "@/pages/CarbonCalculator";
+import locationData from "@/utils/constants/locations.json";
+import type { Location } from "@/utils/locationHelpers";
 
 type PreSurveyProps = {
   surveyData: SurveyData;
   setSurveyData: (data: SurveyData) => void;
+  selectedLocation: Location | null;
+  setSelectedLocation: (location: Location) => void;
   onNext: () => void;
 };
 
-// Mock country data - in a real app this would come from an API
-const countries = [
-  { name: "United States", abbreviation: "US" },
-  { name: "Canada", abbreviation: "CA" },
-  { name: "United Kingdom", abbreviation: "GB" },
-  { name: "Germany", abbreviation: "DE" },
-  { name: "France", abbreviation: "FR" },
-  { name: "Australia", abbreviation: "AU" },
-  { name: "Japan", abbreviation: "JP" },
-  { name: "India", abbreviation: "IN" },
-  { name: "Brazil", abbreviation: "BR" },
-  { name: "Mexico", abbreviation: "MX" },
-];
+// Get countries from location data and sort alphabetically
+const countries = (locationData as Location[])
+  .filter((loc) => loc.type === "country")
+  .sort((a, b) => a.name.localeCompare(b.name));
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -37,7 +32,15 @@ const stagger = {
   },
 };
 
-const PreSurvey = ({ surveyData, setSurveyData, onNext }: PreSurveyProps) => {
+const PreSurvey = ({ surveyData, setSurveyData, selectedLocation, setSelectedLocation, onNext }: PreSurveyProps) => {
+  const handleCountryChange = (value: string) => {
+    const country = countries.find((c) => c.abbreviation === value);
+    if (country) {
+      setSelectedLocation(country);
+      setSurveyData({ ...surveyData, country: value });
+    }
+  };
+
   const handleContinue = () => {
     if (!surveyData.country) {
       alert("Please select a country before continuing.");
@@ -101,7 +104,7 @@ const PreSurvey = ({ surveyData, setSurveyData, onNext }: PreSurveyProps) => {
               <h3 className="text-2xl font-bold text-center text-gray-900">Select Your Country 🌍</h3>
               <Select
                 value={surveyData.country}
-                onValueChange={(value) => setSurveyData({ ...surveyData, country: value })}
+                onValueChange={handleCountryChange}
               >
                 <SelectTrigger className="w-full h-14 text-lg border-2 hover:border-green-400 transition-colors">
                   <SelectValue placeholder="Choose your country" />

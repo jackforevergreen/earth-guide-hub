@@ -11,7 +11,8 @@ type CalculatorNavProps = {
 const stepNames = ["Start", "Transportation", "Diet", "Energy"];
 
 const CalculatorNav = ({ currentStep, totalSteps, onStepClick }: CalculatorNavProps) => {
-  const progress = ((currentStep + 1) / totalSteps) * 100;
+  // Progress fills based on completed steps, not current step
+  const progress = (currentStep / totalSteps) * 100;
 
   return (
     <motion.div

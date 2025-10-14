@@ -7,21 +7,17 @@ import RadioButtonGroup from "./RadioButtonGroup";
 import NumberInput from "./NumberInput";
 import QuestionSlider from "./QuestionSlider";
 import type { SurveyData, SurveyEmissions } from "@/pages/CarbonCalculator";
+import type { Location } from "@/utils/locationHelpers";
+import { getCurrencySymbol } from "@/utils/locationHelpers";
 
 type EnergyProps = {
   surveyData: SurveyData;
   setSurveyData: (data: SurveyData) => void;
   surveyEmissions: SurveyEmissions;
   setSurveyEmissions: (emissions: SurveyEmissions) => void;
+  selectedLocation: Location | null;
   onNext: () => void;
 };
-
-// Mock state data for US
-const mockStateEGridValue = 0.92; // average CO2 factor
-const mockAvgElectricBill = 120;
-const mockAvgWaterBill = 70;
-const mockAvgPropaneBill = 50;
-const mockAvgGasBill = 80;
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -40,10 +36,32 @@ const Energy = ({
   setSurveyData,
   surveyEmissions,
   setSurveyEmissions,
+  selectedLocation,
   onNext,
 }: EnergyProps) => {
+  const currencySymbol = selectedLocation ? getCurrencySymbol(selectedLocation.currency) : "$";
+
+  // Scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  // Update bills when location changes
+  useEffect(() => {
+    if (selectedLocation) {
+      setSurveyData({
+        ...surveyData,
+        electricBill: selectedLocation.averageMonthlyElectricityBill.toFixed(2),
+        waterBill: selectedLocation.averageMonthlyWaterBill.toFixed(2),
+        propaneBill: selectedLocation.averageMonthlyPropaneBill.toFixed(2),
+        gasBill: selectedLocation.averageMonthlyGasBill.toFixed(2),
+      });
+    }
+  }, [selectedLocation, setSurveyData]);
+
   // Calculate energy emissions
   useEffect(() => {
+    if (!selectedLocation) return;
     const bills = {
       electric: parseFloat(surveyData.electricBill || "0"),
       water: parseFloat(surveyData.waterBill || "0"),
@@ -53,15 +71,15 @@ const Energy = ({
 
     const peopleInHome = surveyData.peopleInHome || 1;
 
-    // Simplified calculations
+    // Simplified calculations using location-specific data
     const electricityEmissions =
-      ((((mockStateEGridValue * 0.000453592) / 1000) * 900 * 12 * (bills.electric / mockAvgElectricBill)) / peopleInHome);
+      ((((selectedLocation.stateEGridValue * 0.000453592) / 1000) * 900 * 12 * (bills.electric / selectedLocation.averageMonthlyElectricityBill)) / peopleInHome);
     const waterEmissions =
-      ((bills.water / mockAvgWaterBill) * 0.0052) / peopleInHome;
+      ((bills.water / selectedLocation.averageMonthlyWaterBill) * 0.0052) / peopleInHome;
     const propaneEmissions =
-      ((bills.propane / mockAvgPropaneBill) * 0.24) / peopleInHome;
+      ((bills.propane / selectedLocation.averageMonthlyPropaneBill) * 0.24) / peopleInHome;
     const gasEmissions =
-      ((bills.gas / mockAvgGasBill) * 2.12) / peopleInHome;
+      ((bills.gas / selectedLocation.averageMonthlyGasBill) * 2.12) / peopleInHome;
 
     const totalEnergyEmissions =
       electricityEmissions + waterEmissions + propaneEmissions + gasEmissions;
@@ -80,7 +98,7 @@ const Energy = ({
       totalEmissions,
       monthlyEmissions: totalEmissions / 12,
     });
-  }, [surveyData, surveyEmissions.dietEmissions, surveyEmissions.transportationEmissions]);
+  }, [surveyData, surveyEmissions.dietEmissions, surveyEmissions.transportationEmissions, selectedLocation]);
 
   const isValid =
     surveyData.electricBill !== "" &&
@@ -116,7 +134,7 @@ const Energy = ({
             question="How much was your electric bill last month? ⚡"
             value={surveyData.electricBill || "0"}
             onChange={(value) => setSurveyData({ ...surveyData, electricBill: value })}
-            unit="$"
+            unit={currencySymbol}
             label="per month"
             maxValue={1000}
           />
@@ -125,7 +143,7 @@ const Energy = ({
             question="How much was your water bill last month? 🚰"
             value={surveyData.waterBill || "0"}
             onChange={(value) => setSurveyData({ ...surveyData, waterBill: value })}
-            unit="$"
+            unit={currencySymbol}
             label="per month"
             maxValue={500}
           />
@@ -134,7 +152,7 @@ const Energy = ({
             question="How much was spent on propane last month? 🛢"
             value={surveyData.propaneBill || "0"}
             onChange={(value) => setSurveyData({ ...surveyData, propaneBill: value })}
-            unit="$"
+            unit={currencySymbol}
             label="per month"
             maxValue={500}
           />
@@ -143,7 +161,7 @@ const Energy = ({
             question="How much was spent on natural gas last month? ⛽"
             value={surveyData.gasBill || "0"}
             onChange={(value) => setSurveyData({ ...surveyData, gasBill: value })}
-            unit="$"
+            unit={currencySymbol}
             label="per month"
             maxValue={500}
           />

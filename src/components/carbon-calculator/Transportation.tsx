@@ -7,12 +7,15 @@ import RadioButtonGroup from "./RadioButtonGroup";
 import NumberInput from "./NumberInput";
 import QuestionSlider from "./QuestionSlider";
 import type { SurveyData, SurveyEmissions } from "@/pages/CarbonCalculator";
+import type { Location } from "@/utils/locationHelpers";
+import { kmToMiles } from "@/utils/locationHelpers";
 
 type TransportationProps = {
   surveyData: SurveyData;
   setSurveyData: (data: SurveyData) => void;
   surveyEmissions: SurveyEmissions;
   setSurveyEmissions: (emissions: SurveyEmissions) => void;
+  selectedLocation: Location | null;
   onNext: () => void;
 };
 
@@ -33,8 +36,17 @@ const Transportation = ({
   setSurveyData,
   surveyEmissions,
   setSurveyEmissions,
+  selectedLocation,
   onNext,
 }: TransportationProps) => {
+  const isMetric = selectedLocation?.unitSystem === "metric";
+  const distanceUnit = isMetric ? "km" : "miles";
+
+  // Scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   // Calculate emissions whenever survey data changes
   useEffect(() => {
     let flightEmissions = 0;
@@ -57,7 +69,11 @@ const Transportation = ({
         "Electric ⚡": 200,
       }[surveyData.carType] || 300;
 
-      const distanceInMiles = parseFloat(surveyData.milesPerWeek);
+      // Convert km to miles for calculation if using metric
+      const distanceInMiles = isMetric
+        ? kmToMiles(parseFloat(surveyData.milesPerWeek))
+        : parseFloat(surveyData.milesPerWeek);
+
       carEmissions = (carEmissionRates * distanceInMiles * 52) / 1000000;
     }
 
@@ -76,7 +92,7 @@ const Transportation = ({
       publicTransportEmissions,
       transportationEmissions: flightEmissions + carEmissions + publicTransportEmissions,
     });
-  }, [surveyData]);
+  }, [surveyData, isMetric]);
 
   const isValid =
     surveyData.longFlights !== undefined &&
@@ -143,11 +159,11 @@ const Transportation = ({
 
           {surveyData.carType && surveyData.carType !== "None" && (
             <NumberInput
-              question="How many miles do you drive per week? 🛞"
+              question={`How many ${distanceUnit} do you drive per week? 🛞`}
               value={surveyData.milesPerWeek || ""}
               onChange={(value) => setSurveyData({ ...surveyData, milesPerWeek: value })}
-              label="miles per week"
-              maxValue={6000}
+              label={`${distanceUnit} per week`}
+              maxValue={isMetric ? 10000 : 6000}
             />
           )}
 
@@ -160,11 +176,11 @@ const Transportation = ({
 
           {surveyData.useTrain === "Yes" && (
             <NumberInput
-              question="How many miles per week on train/metro?"
+              question={`How many ${distanceUnit} per week on train/metro?`}
               value={surveyData.trainFrequency || ""}
               onChange={(value) => setSurveyData({ ...surveyData, trainFrequency: value })}
-              label="miles per week"
-              maxValue={500}
+              label={`${distanceUnit} per week`}
+              maxValue={isMetric ? 800 : 500}
             />
           )}
 
@@ -177,11 +193,11 @@ const Transportation = ({
 
           {surveyData.useBus === "Yes" && (
             <NumberInput
-              question="How many miles per week on bus?"
+              question={`How many ${distanceUnit} per week on bus?`}
               value={surveyData.busFrequency || ""}
               onChange={(value) => setSurveyData({ ...surveyData, busFrequency: value })}
-              label="miles per week"
-              maxValue={500}
+              label={`${distanceUnit} per week`}
+              maxValue={isMetric ? 800 : 500}
             />
           )}
 

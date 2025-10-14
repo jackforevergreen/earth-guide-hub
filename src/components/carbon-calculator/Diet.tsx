@@ -33,6 +33,11 @@ const Diet = ({
   setSurveyEmissions,
   onNext,
 }: DietProps) => {
+  // Scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   // Calculate diet emissions
   useEffect(() => {
     const emissionRates = {

@@ -1,9 +1,13 @@
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
-import { Leaf, Zap, Car, Utensils, Home, TrendingDown, Award } from "lucide-react";
+import { Leaf, Zap, Car, Utensils, Home, TrendingDown, Award, LogIn } from "lucide-react";
 import { motion } from "framer-motion";
 import type { SurveyData, SurveyEmissions } from "@/pages/CarbonCalculator";
+import { auth } from "@/lib/firebase";
+import { saveEmissionsData, saveCommunityEmissionsData } from "@/api/emissions";
+import LoginModal from "@/components/auth/LoginModal";
 
 type BreakdownProps = {
   surveyData: SurveyData;
@@ -24,6 +28,44 @@ const stagger = {
 
 const Breakdown = ({ surveyData, surveyEmissions }: BreakdownProps) => {
   const navigate = useNavigate();
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [dataSaved, setDataSaved] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  // Scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  // Check auth status and save data if logged in
+  useEffect(() => {
+    const saveData = async () => {
+      const user = auth.currentUser;
+      setIsLoggedIn(!!user);
+
+      if (user && !dataSaved) {
+        try {
+          // Save emissions data
+          await saveEmissionsData({
+            surveyData,
+            surveyEmissions,
+            totalEmissions: surveyEmissions.totalEmissions || 0,
+            monthlyEmissions: surveyEmissions.monthlyEmissions || 0,
+          });
+
+          // Update community stats
+          await saveCommunityEmissionsData(surveyEmissions.totalEmissions || 0);
+
+          setDataSaved(true);
+          console.log("Data saved successfully!");
+        } catch (error) {
+          console.error("Error saving data:", error);
+        }
+      }
+    };
+
+    saveData();
+  }, [surveyData, surveyEmissions, dataSaved]);
 
   const totalEmissions = surveyEmissions.totalEmissions || 0;
   const avgAmericanEmissions = 16; // Average American carbon footprint
@@ -51,6 +93,35 @@ const Breakdown = ({ surveyData, surveyEmissions }: BreakdownProps) => {
         <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3 mt-4">Your Carbon Footprint Results</h1>
         <p className="text-xl text-gray-600">Here's your environmental impact breakdown</p>
       </motion.div>
+
+      {/* Login Prompt Banner (if not logged in) */}
+      {!isLoggedIn && (
+        <motion.div variants={fadeUp}>
+          <Card className="shadow-lg border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-green-50">
+            <CardContent className="py-6">
+              <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div className="text-center md:text-left">
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    Save Your Progress!
+                  </h3>
+                  <p className="text-gray-700">
+                    Create an account to track your carbon footprint over time and see your progress.
+                  </p>
+                </div>
+                <Button
+                  onClick={() => setLoginModalOpen(true)}
+                  variant="hero"
+                  size="lg"
+                  className="flex-shrink-0 gap-2"
+                >
+                  <LogIn className="h-5 w-5" />
+                  Sign Up / Log In
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
 
       {/* Main Results Card */}
       <motion.div variants={fadeUp}>
@@ -196,15 +267,41 @@ const Breakdown = ({ surveyData, surveyEmissions }: BreakdownProps) => {
       {/* Back to Home */}
       <motion.div variants={fadeUp} className="text-center pb-8">
         <Button
-          onClick={() => navigate("/")}
-          variant="ghost"
+          onClick={() => {
+            navigate("/");
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }}
+          variant="outline"
           size="lg"
-          className="text-lg"
+          className="text-lg font-semibold border-2 border-primary text-primary hover:bg-primary hover:text-white transition-all shadow-md hover:shadow-lg"
         >
           <Home className="h-5 w-5 mr-2" />
-          Back to Home
+          Return to Home
         </Button>
       </motion.div>
+
+      {/* Login Modal */}
+      <LoginModal
+        isOpen={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+        onSuccess={async () => {
+          // After successful login, save the data
+          try {
+            await saveEmissionsData({
+              surveyData,
+              surveyEmissions,
+              totalEmissions: surveyEmissions.totalEmissions || 0,
+              monthlyEmissions: surveyEmissions.monthlyEmissions || 0,
+            });
+            await saveCommunityEmissionsData(surveyEmissions.totalEmissions || 0);
+            setDataSaved(true);
+            setIsLoggedIn(true);
+            console.log("Data saved after login!");
+          } catch (error) {
+            console.error("Error saving data after login:", error);
+          }
+        }}
+      />
     </motion.div>
   );
 };
