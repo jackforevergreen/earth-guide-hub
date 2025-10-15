@@ -78,11 +78,12 @@ export default function NetZeroPromo() {
         <motion.div
           {...fade}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="text-center mt-14 md:mt-16"
+          className="text-center mt-0 md:mt-0"
         >
           <Button
+            variant="primary-action"
             size="lg"
-            className="bg-green-600 hover:bg-green-700 text-white text-lg md:text-xl px-8 md:px-10 py-6 md:py-7 inline-flex items-center gap-3 rounded-full shadow-lg transition-all duration-300"
+            className="text-lg md:text-xl px-8 md:px-10 py-6 md:py-7 inline-flex items-center gap-3 rounded-xl"
           >
             Get Started Today
           </Button>

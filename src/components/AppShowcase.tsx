@@ -58,20 +58,31 @@ export default function ClimateHero() {
                 <span className="text-muted-foreground">• 25 Ratings</span>
               </div>
 
-              <a
+              <motion.a
                 href="https://apps.apple.com/us/app/forevergreen-app/id6578432563"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-block"
                 aria-label="Download on the App Store"
+                data-analytics-event="app-download"
+                data-analytics-source="app-store-badge"
+                whileHover={{
+                  scale: 1.05,
+                  transition: { duration: 0.2 }
+                }}
+                whileTap={{ scale: 0.95 }}
               >
-                <img
+                <motion.img
                   src={appStoreBadge}
                   alt="Download on the App Store"
-                  className="h-12 md:h-14 w-auto select-none"
+                  className="h-12 md:h-14 w-auto select-none transition-all duration-300 hover:shadow-lg"
                   draggable={false}
+                  whileHover={{
+                    y: -2,
+                    transition: { duration: 0.2 }
+                  }}
                 />
-              </a>
+              </motion.a>
             </div>
 
             {/* MOBILE-ONLY PHONE (sits above How it works) */}
@@ -112,15 +123,6 @@ export default function ClimateHero() {
                 </div>
               ))}
             </div>
-
-            <Button
-              variant="hero"
-              size="lg"
-              className="mt-8 text-lg px-8 py-6 inline-flex items-center gap-2"
-            >
-              <Smartphone className="h-6 w-6" />
-              Download Now!
-            </Button>
           </motion.div>
 
           {/* DESKTOP PHONE (stays on the right) */}

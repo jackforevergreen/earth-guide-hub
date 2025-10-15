@@ -6,7 +6,7 @@ import { Mail } from "lucide-react";
 
 const Newsletter = () => {
   return (
-    <section className="py-20 bg-muted/30">
+    <section id="newsletter" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="max-w-2xl mx-auto">
           <Card className="p-8 md:p-12 bg-gradient-to-br from-card to-accent/20 shadow-[var(--shadow-card)] border-0 text-center rounded-2xl">
@@ -34,8 +34,8 @@ const Newsletter = () => {
                 placeholder="you@example.com"
                 className="flex-1 h-12 rounded-xl border-2 border-input focus:border-primary transition-colors"
               />
-              <Button variant="hero" size="lg" className="px-8 h-12 rounded-xl">
-                Join the newsletter
+              <Button variant="hero" size="lg" className="px-8 h-12 rounded-xl text-lg">
+                Join the Newsletter
               </Button>
             </div>
 

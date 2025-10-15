@@ -1,7 +1,8 @@
 import heroBackground from "@/assets/hero-background.jpg";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
-import { Download } from "lucide-react";
+import { Download, Users, ShoppingCart } from "lucide-react";
+import { useSubscriberCount } from "@/lib/youtube/youtube-context";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 12 },
@@ -15,6 +16,7 @@ const stagger = {
 };
 
 const Hero = () => {
+  const subscriberCount = useSubscriberCount();
   return (
     <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden pt-16">
       {/* Background */}
@@ -36,7 +38,7 @@ const Hero = () => {
           className="text-6xl sm:text-6xl md:text-8xl font-bold mb-5 sm:mb-6 text-white"
         >
           Forever
-          <span className="font-bold" style={{ color: "#217E38" }}>
+          <span className="font-bold text-primary">
             green
           </span>
         </motion.h1>
@@ -56,18 +58,64 @@ const Hero = () => {
           <Button
             variant="hero"
             size="lg"
-            className="w-full sm:w-auto text-base sm:text-lg px-5 py-3 sm:px-6 sm:py-4"
+            className="w-full sm:w-auto text-base sm:text-lg px-5 py-3 sm:px-6 sm:py-4 transition-all duration-150 hover:scale-105 hover:shadow-lg active:scale-95"
+            asChild
           >
-            <Download className="h-5 w-5" />
-            Download the App
+            <motion.a
+              href="https://apps.apple.com/us/app/forevergreen-app/id6578432563"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2"
+              data-analytics-event="app-download"
+              data-analytics-source="hero-section"
+              whileHover={{
+                scale: 1.05,
+                transition: { duration: 0.15, ease: "easeOut" }
+              }}
+              whileTap={{
+                scale: 0.95,
+                transition: { duration: 0.1 }
+              }}
+            >
+              <motion.div
+                whileHover={{ rotate: [0, -10, 10, 0] }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
+              >
+                <Download className="h-5 w-5" />
+              </motion.div>
+              Download the App
+            </motion.a>
           </Button>
           <Button
             variant="outline-hero"
             size="lg"
             className="w-full sm:w-auto text-base sm:text-lg px-5 py-3 sm:px-6 sm:py-4"
+            asChild
           >
-            Offset Now
+            <a href="/shop" className="inline-flex items-center gap-2">
+              Offset Now
+            </a>
           </Button>
+        </motion.div>
+
+        {/* Dynamic Counters - Placeholders for future real-time data */}
+        <motion.div
+          variants={fadeUp}
+          className="mt-8 sm:mt-10 flex flex-col sm:flex-row gap-6 sm:gap-8 justify-center items-center text-white/80"
+        >
+          <div className="flex items-center gap-2 text-sm sm:text-base">
+            <Users className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="font-medium">
+              <span className="text-white font-bold">{subscriberCount}</span> Subscribers
+            </span>
+          </div>
+          <div className="hidden sm:block w-px h-4 bg-white/30" />
+          <div className="flex items-center gap-2 text-sm sm:text-base">
+            <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="font-medium">
+              <span className="text-white font-bold">1.2M+</span> lbs CO₂ Offset
+            </span>
+          </div>
         </motion.div>
       </motion.div>
     </section>

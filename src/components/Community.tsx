@@ -9,6 +9,8 @@ import {
 } from "framer-motion";
 import { Leaf, Mail, Trees, Youtube } from "lucide-react";
 import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSubscriberCount } from "@/lib/youtube/youtube-context";
 
 /* ===========================
    Types
@@ -21,6 +23,8 @@ type Stat = {
   rotate?: number; // base rotation (deg)
   coords?: XY; // desktop coordinates (px, relative to center)
   coordsSm?: XY; // mobile coordinates (px, relative to center)
+  link?: string; // URL or path to navigate to
+  linkType?: "internal" | "external" | "scroll"; // type of navigation
 };
 
 /* ===========================
@@ -66,32 +70,40 @@ function useViewportScale({
 =========================== */
 const statsDefault: Stat[] = [
   {
-    label: "1.2M lbs Offset",
+    label: "1.2M+ lbs Offset",
     icon: <Trees className="w-[2em] h-[2em]" />,
     rotate: -8,
     coords: { x: 340, y: -210 },
     coordsSm: { x: 130, y: -70 },
+    link: "/shop",
+    linkType: "internal",
   },
   {
-    label: "250k+ Subs",
+    label: "250K+ Subscribers",
     icon: <Youtube className="w-[2em] h-[2em] text-red-500" />,
     rotate: 8,
     coords: { x: -340, y: -210 },
     coordsSm: { x: -130, y: -70 },
+    link: "https://www.youtube.com/@Forevergreenapp",
+    linkType: "external",
   },
   {
-    label: "10k tons Calculated",
+    label: "10K+ tons Calculated",
     icon: <Leaf className="w-[2em] h-[2em] text-green-600" />,
     rotate: -8,
     coords: { x: -300, y: 210 },
     coordsSm: { x: -120, y: 95 },
+    link: "https://apps.apple.com/us/app/forevergreen-app/id6578432563",
+    linkType: "external",
   },
   {
-    label: "2.5k Newsletter Subs",
+    label: "3K+ Newsletter Subs",
     icon: <Mail className="w-[2em] h-[2em]" />,
     rotate: 10,
     coords: { x: 300, y: 210 },
     coordsSm: { x: 120, y: 95 },
+    link: "#newsletter",
+    linkType: "scroll",
   },
 ];
 
@@ -122,6 +134,34 @@ function StatBubble({
   baseRotate?: number;
   baseXY: XY;
 }) {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (!s.link) return;
+
+    switch (s.linkType) {
+      case "internal":
+        navigate(s.link);
+        break;
+      case "external":
+        window.open(s.link, "_blank", "noopener,noreferrer");
+        break;
+      case "scroll":
+        if (s.link.startsWith("#")) {
+          const element = document.querySelector(s.link);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }
+        break;
+      default:
+        if (s.link.startsWith("http")) {
+          window.open(s.link, "_blank", "noopener,noreferrer");
+        } else {
+          navigate(s.link);
+        }
+    }
+  };
   const prefersReduced = useReducedMotion();
   const time = useTime();
 
@@ -162,7 +202,7 @@ function StatBubble({
 
   return (
     <motion.div
-      className="absolute flex flex-col items-center text-center text-foreground whitespace-nowrap pointer-events-none will-change-transform"
+      className="absolute flex flex-col items-center text-center text-foreground whitespace-nowrap pointer-events-auto cursor-pointer will-change-transform group"
       style={{
         x,
         y,
@@ -170,19 +210,25 @@ function StatBubble({
         opacity: fadeOpacity,
         scale: scaleEnter,
       }}
+      whileHover={{
+        scale: 1.05,
+        transition: { duration: 0.2 }
+      }}
+      whileTap={{ scale: 0.95 }}
       transition={{ ease: "easeOut", duration: 0.6 }}
+      onClick={handleClick}
     >
       <motion.span
         style={{
           scale: sIdle,
           filter: "drop-shadow(0 12px 36px rgba(0,0,0,0.18))",
         }}
-        className="mb-1"
+        className="mb-1 group-hover:scale-110 transition-transform duration-200"
       >
         {s.icon}
       </motion.span>
       <span
-        className="font-medium select-none"
+        className="font-medium select-none group-hover:font-semibold group-hover:text-primary transition-all duration-200"
         style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.08))" }}
       >
         {s.label}
@@ -195,10 +241,51 @@ function StatBubble({
    Section
 =========================== */
 export default function CommunityStatsLocked({
-  stats = statsDefault,
+  stats,
 }: {
   stats?: Stat[];
 }) {
+  const subscriberCount = useSubscriberCount();
+
+  // Create dynamic stats with real subscriber count
+  const dynamicStats = stats || [
+    {
+      label: "1.2M+ lbs Offset",
+      icon: <Trees className="w-[2em] h-[2em]" />,
+      rotate: -8,
+      coords: { x: 340, y: -210 },
+      coordsSm: { x: 130, y: -70 },
+      link: "/shop",
+      linkType: "internal" as const,
+    },
+    {
+      label: `${subscriberCount} Subscribers`,
+      icon: <Youtube className="w-[2em] h-[2em] text-red-500" />,
+      rotate: 8,
+      coords: { x: -340, y: -210 },
+      coordsSm: { x: -130, y: -70 },
+      link: "https://www.youtube.com/@Forevergreenapp",
+      linkType: "external" as const,
+    },
+    {
+      label: "12K+ tons Calculated",
+      icon: <Leaf className="w-[2em] h-[2em] text-green-600" />,
+      rotate: -8,
+      coords: { x: -300, y: 210 },
+      coordsSm: { x: -120, y: 95 },
+      link: "https://apps.apple.com/us/app/forevergreen-app/id6578432563",
+      linkType: "external" as const,
+    },
+    {
+      label: "3K+ Newsletter Subs",
+      icon: <Mail className="w-[2em] h-[2em]" />,
+      rotate: 10,
+      coords: { x: 300, y: 210 },
+      coordsSm: { x: 120, y: 95 },
+      link: "#newsletter",
+      linkType: "scroll" as const,
+    },
+  ];
   const prefersReduced = useReducedMotion();
   const sectionRef = useRef<HTMLElement | null>(null);
   const isSmall = useIsSmall();
@@ -270,7 +357,7 @@ export default function CommunityStatsLocked({
           </motion.h2>
 
           {/* Stat bubbles with explicit coordinates */}
-          {stats.slice(0, 4).map((s, i) => {
+          {dynamicStats.slice(0, 4).map((s, i) => {
             const baseXY = isSmall
               ? s.coordsSm ?? s.coords ?? { x: 0, y: 0 }
               : s.coords ?? s.coordsSm ?? { x: 0, y: 0 };
