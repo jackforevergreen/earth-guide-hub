@@ -148,7 +148,17 @@ const Breakdown = ({ surveyData, surveyEmissions }: BreakdownProps) => {
                 Your Footprint
               </h3>
               <div className="space-y-4 max-w-2xl mx-auto">
-                <div className="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border-2 border-blue-200 shadow-sm">
+                <motion.div
+                  className="p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg border-2 border-blue-200 shadow-sm"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                  variants={{
+                    hidden: { opacity: 0, x: -20 },
+                    visible: { opacity: 1, x: 0 }
+                  }}
+                >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
                       <Car className="h-6 w-6 text-blue-600" />
@@ -156,15 +166,28 @@ const Breakdown = ({ surveyData, surveyEmissions }: BreakdownProps) => {
                     </div>
                     <span className="text-xl font-bold text-gray-900">{surveyEmissions.transportationEmissions?.toFixed(2)} tons</span>
                   </div>
-                  <div className="w-full bg-blue-200 rounded-full h-3">
-                    <div
-                      className="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full shadow-inner"
-                      style={{ width: `${((surveyEmissions.transportationEmissions || 0) / totalEmissions) * 100}%` }}
+                  <div className="w-full bg-blue-200 rounded-full h-3 overflow-hidden">
+                    <motion.div
+                      className="bg-gradient-to-r from-blue-300 to-blue-600 h-3 rounded-full shadow-inner"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${((surveyEmissions.transportationEmissions || 0) / totalEmissions) * 100}%` }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
                     />
                   </div>
-                </div>
+                </motion.div>
 
-                <div className="p-4 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg border-2 border-orange-200 shadow-sm">
+                <motion.div
+                  className="p-4 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg border-2 border-orange-200 shadow-sm"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                  variants={{
+                    hidden: { opacity: 0, x: -20 },
+                    visible: { opacity: 1, x: 0 }
+                  }}
+                >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
                       <Utensils className="h-6 w-6 text-orange-600" />
@@ -172,29 +195,45 @@ const Breakdown = ({ surveyData, surveyEmissions }: BreakdownProps) => {
                     </div>
                     <span className="text-xl font-bold text-gray-900">{surveyEmissions.dietEmissions?.toFixed(2)} tons</span>
                   </div>
-                  <div className="w-full bg-orange-200 rounded-full h-3">
-                    <div
-                      className="bg-gradient-to-r from-orange-500 to-orange-600 h-3 rounded-full shadow-inner"
-                      style={{ width: `${((surveyEmissions.dietEmissions || 0) / totalEmissions) * 100}%` }}
+                  <div className="w-full bg-orange-200 rounded-full h-3 overflow-hidden">
+                    <motion.div
+                      className="bg-gradient-to-r from-orange-400 to-orange-600 h-3 rounded-full shadow-inner"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${((surveyEmissions.dietEmissions || 0) / totalEmissions) * 100}%` }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
                     />
                   </div>
-                </div>
+                </motion.div>
 
-                <div className="p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-lg border-2 border-yellow-200 shadow-sm">
+                <motion.div
+                  className="p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-lg border-2 border-yellow-200 shadow-sm"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  variants={{
+                    hidden: { opacity: 0, x: -20 },
+                    visible: { opacity: 1, x: 0 }
+                  }}
+                >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
-                      <Zap className="h-6 w-6 text-yellow-600" />
+                      <Zap className="h-6 w-6 text-yellow-400" />
                       <span className="text-lg font-semibold text-gray-900">Energy</span>
                     </div>
                     <span className="text-xl font-bold text-gray-900">{surveyEmissions.energyEmissions?.toFixed(2)} tons</span>
                   </div>
-                  <div className="w-full bg-yellow-200 rounded-full h-3">
-                    <div
-                      className="bg-gradient-to-r from-yellow-500 to-yellow-600 h-3 rounded-full shadow-inner"
-                      style={{ width: `${((surveyEmissions.energyEmissions || 0) / totalEmissions) * 100}%` }}
+                  <div className="w-full bg-yellow-200 rounded-full h-3 overflow-hidden">
+                    <motion.div
+                      className="bg-gradient-to-r from-yellow-300 to-yellow-500 h-3 rounded-full shadow-inner"
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${((surveyEmissions.energyEmissions || 0) / totalEmissions) * 100}%` }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
                     />
                   </div>
-                </div>
+                </motion.div>
               </div>
             </div>
 
@@ -211,36 +250,63 @@ const Breakdown = ({ surveyData, surveyEmissions }: BreakdownProps) => {
 
                 {/* Bar Graph */}
                 <div className="space-y-4 mb-6">
-                  <div>
+                  <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.6, delay: 0.2 }}
+                    variants={{
+                      hidden: { opacity: 0, y: 10 },
+                      visible: { opacity: 1, y: 0 }
+                    }}
+                  >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-semibold text-gray-700">Average American</span>
                       <span className="text-sm font-bold text-gray-900">{avgAmericanEmissions} tons</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-8 shadow-inner">
-                      <div className="bg-gradient-to-r from-gray-400 to-gray-500 h-8 rounded-full flex items-center justify-end pr-3" style={{ width: '100%' }}>
+                    <div className="w-full bg-gray-200 rounded-full h-8 shadow-inner overflow-hidden">
+                      <motion.div
+                        className="bg-gradient-to-r from-gray-400 to-gray-500 h-8 rounded-full flex items-center justify-end pr-3"
+                        initial={{ width: 0 }}
+                        whileInView={{ width: '100%' }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        transition={{ duration: 1, delay: 0.4, ease: "easeOut" }}
+                      >
                         <span className="text-xs font-semibold text-white">100%</span>
-                      </div>
+                      </motion.div>
                     </div>
-                  </div>
+                  </motion.div>
 
-                  <div>
+                  <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.6, delay: 0.4 }}
+                    variants={{
+                      hidden: { opacity: 0, y: 10 },
+                      visible: { opacity: 1, y: 0 }
+                    }}
+                  >
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-semibold text-gray-700">Your Footprint</span>
                       <span className="text-sm font-bold text-gray-900">{totalEmissions.toFixed(2)} tons</span>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-8 shadow-inner">
-                      <div
+                    <div className="w-full bg-gray-200 rounded-full h-8 shadow-inner overflow-hidden">
+                      <motion.div
                         className={`h-8 rounded-full flex items-center justify-end pr-3 ${
                           totalEmissions < avgAmericanEmissions
                             ? 'bg-gradient-to-r from-green-500 to-green-600'
                             : 'bg-gradient-to-r from-red-500 to-red-600'
                         }`}
-                        style={{ width: `${Math.min((totalEmissions / avgAmericanEmissions) * 100, 100)}%` }}
+                        initial={{ width: 0 }}
+                        whileInView={{ width: `${Math.min((totalEmissions / avgAmericanEmissions) * 100, 100)}%` }}
+                        viewport={{ once: true, amount: 0.3 }}
+                        transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
                       >
                         <span className="text-xs font-semibold text-white">{percentageOfAverage}%</span>
-                      </div>
+                      </motion.div>
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
 
                 {/* Comparison Message */}
@@ -332,7 +398,7 @@ const Breakdown = ({ surveyData, surveyEmissions }: BreakdownProps) => {
 
               <div className="p-6 bg-gradient-to-br from-yellow-50 to-yellow-100 border-2 border-yellow-200 rounded-lg shadow-md hover:shadow-lg transition-shadow">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="p-2 bg-yellow-600 rounded-lg">
+                  <div className="p-2 bg-yellow-400 rounded-lg">
                     <Zap className="h-6 w-6 text-white" />
                   </div>
                   <h4 className="text-xl font-bold text-yellow-900">Energy</h4>
