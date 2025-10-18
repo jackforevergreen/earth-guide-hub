@@ -75,7 +75,7 @@ const Diet = ({
       </motion.div>
 
       <motion.div variants={fadeUp}>
-        <Card className="shadow-xl border-2 border-orange-300">
+        <Card className="shadow-md border-2 border-orange-300">
           <CardContent className="space-y-6">
           <RadioButtonGroup
             question="Select your Diet:"

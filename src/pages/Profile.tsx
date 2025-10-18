@@ -139,11 +139,6 @@ const Profile = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 via-white to-blue-50">
-      {/* Background decorations */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-green-200/30 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl translate-x-1/2 translate-y-1/2" />
-      </div>
 
       <Navigation />
 
@@ -174,7 +169,7 @@ const Profile = () => {
 
           {/* Account Info Card */}
           <motion.div variants={fadeUp} className="mb-6">
-            <Card className="shadow-xl border-2 border-gray-200 hover:shadow-2xl transition-shadow">
+            <Card className="shadow-md border-2 border-gray-200 hover:shadow-xl transition-shadow">
               <CardHeader className="bg-gray-100 text-center pb-6">
                 <div className="mx-auto mb-3">
                   <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
@@ -219,7 +214,7 @@ const Profile = () => {
 
           {/* Current Month Emissions Card */}
           <motion.div variants={fadeUp} className="mb-6">
-            <Card className="shadow-xl border-2 border-gray-200 hover:shadow-2xl transition-shadow">
+            <Card className="shadow-md border-2 border-gray-200 hover:shadow-xl transition-shadow">
               <CardHeader className="bg-gray-100 text-center pb-6">
                 <div className="mx-auto mb-3">
                   <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-green-500 to-green-600 shadow-lg">

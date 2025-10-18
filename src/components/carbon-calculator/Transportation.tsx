@@ -124,7 +124,7 @@ const Transportation = ({
       </motion.div>
 
       <motion.div variants={fadeUp}>
-        <Card className="shadow-xl border-2 border-blue-300">
+        <Card className="shadow-md border-2 border-blue-300">
           <CardContent className="space-y-6">
           <QuestionSlider
             question="In the last year, how many long round-trip flights have you been on? (more than 10 hours round trip) ✈️"

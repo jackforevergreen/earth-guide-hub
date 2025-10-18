@@ -128,7 +128,7 @@ const Energy = ({
       </motion.div>
 
       <motion.div variants={fadeUp}>
-        <Card className="shadow-xl border-2 border-yellow-400">
+        <Card className="shadow-md border-2 border-yellow-400">
           <CardContent className="space-y-6">
           <NumberInput
             question="How much was your electric bill last month? ⚡"
